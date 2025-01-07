@@ -29,6 +29,16 @@ int ccsExit(char **args) {
     return 0;
 }
 
+int ccsPrintWorkingDirectory(char **args){
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        printf("%s\n", cwd);
+    } else {
+        perror("ccs");
+    }
+    return 1;
+}
+
 int ccsExecute(char **args) {
     if (args[0] == NULL) {
         return 1; // Empty command
