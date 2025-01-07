@@ -6,6 +6,29 @@
 #define CCS_TOK_BUFSIZE 64
 #define CCS_TOK_DELIM " \t\r\n\a"
 
+int ccsChangeDirectory(char **args) {
+    if (args[1] == NULL) {
+        fprintf(stderr, "ccs: expected argument to \"cd\"\n");
+    } else {
+        if (chdir(args[1]) != 0) {
+            perror("ccs");
+        }
+    }
+    return 1;
+}
+
+int ccsHelp(char **args) {
+    printf("The following are built-in commands:\n");
+    printf(" cd\n");
+    printf(" help\n");
+    printf(" exit\n");
+    return 1;
+}
+
+int ccsExit(char **args) {
+    return 0;
+}
+
 int ccsExecute(char **args) {
     if (args[0] == NULL) {
         return 1; // Empty command
