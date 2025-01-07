@@ -34,7 +34,20 @@ int ccsExecute(char **args) {
         return 1; // Empty command
     }
 
-    // Execute external command if not built-in
+    // Built-in commands
+    if (strcmp(args[0], "cd") == 0) {
+        return ccsChangeDirectory(args);
+    }
+
+    if (strcmp(args[0], "help") == 0) {
+        return ccsHelp(args);
+    }
+
+    if (strcmp(args[0], "exit") == 0) {
+        return ccsExit(args);
+    }
+
+    // External commands
     pid_t pid = fork();
     if (pid == 0) {
         if (execvp(args[0], args) == -1) {
