@@ -6,6 +6,28 @@
 #define CCS_TOK_BUFSIZE 64
 #define CCS_TOK_DELIM " \t\r\n\a"
 
+int ccsExecute(char **args) {
+    if (args[0] == NULL) {
+        return 1; // Empty command
+    }
+
+    // Execute external command if not built-in
+    pid_t pid = fork();
+    if (pid == 0) {
+        if (execvp(args[0], args) == -1) {
+            perror("ccs");
+        }
+        exit(EXIT_FAILURE);
+    } else if (pid < 0) {
+        perror("ccs");
+    } else {
+        int status;
+        waitpid(pid, &status, WUNTRACED);
+    }
+
+    return 1;
+}
+
 char *ccsReadLine(void){
     size_t bufsize = 1024;
     size_t position = 0;
