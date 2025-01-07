@@ -39,6 +39,13 @@ int ccsPrintWorkingDirectory(char **args){
     return 1;
 }
 
+int ccsList(char **args) {
+    if (execvp("ls", args) == -1) {
+        perror("ccs");
+    }
+    return 1;
+}
+
 int ccsExecute(char **args) {
     if (args[0] == NULL) {
         return 1; // Empty command
