@@ -3,6 +3,9 @@
 #include <unistd.h>
 #include <string.h>
 
+#define CCS_TOK_BUFSIZE 64
+#define CCS_TOK_DELIM " \t\r\n\a"
+
 char *ccsReadLine(void){
     size_t bufsize = 1024;
     size_t position = 0;
@@ -35,6 +38,36 @@ char *ccsReadLine(void){
             }
         }
     }
+}
+
+char **ccsSplitLine(char *line) {
+    int bufsize = CCS_TOK_BUFSIZE, position = 0;
+    char **tokens = malloc(bufsize * sizeof(char *));
+    char *token;
+
+    if (!tokens) {
+        fprintf(stderr, "ccs: allocation error\n");
+        exit(EXIT_FAILURE);
+    }
+
+    token = strtok(line, CCS_TOK_DELIM);
+    while (token != NULL) {
+        tokens[position] = token;
+        position++;
+
+        if (position >= bufsize) {
+            bufsize += CCS_TOK_BUFSIZE;
+            tokens = realloc(tokens, bufsize * sizeof(char *));
+            if (!tokens) {
+                fprintf(stderr, "ccs: allocation error\n");
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        token = strtok(NULL,CCS_TOK_DELIM);
+    }
+    tokens[position] = NULL;
+    return tokens;
 }
 
 void ccsLoop(void) {
