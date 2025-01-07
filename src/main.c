@@ -76,14 +76,6 @@ int ccsPrintWorkingDirectory(char** args) {
     return 1;
 }
 
-/* Built-in command: list directory contents */
-int ccsList(char** args) {
-    if (execvp("ls", args) == -1) {
-        perror("ccs");
-    }
-    return 1;
-}
-
 /* Launch a program and wait for it to terminate */
 int ccsLaunch(char** args) {
     pid_t pid;
@@ -126,6 +118,11 @@ int ccsExecute(char** args) {
         }
     }
 
+    return ccsLaunch(args);
+}
+
+/* Built-in command: list directory contents */
+int ccsList(char** args) {
     return ccsLaunch(args);
 }
 
